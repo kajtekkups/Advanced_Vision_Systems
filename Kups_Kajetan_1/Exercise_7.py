@@ -16,7 +16,7 @@ sobel = cv2.Sobel(I, ddepth=cv2.CV_8U, dx=1, dy=1, ksize=3) #Calculates the firs
 laplacian = cv2.Laplacian(I, cv2.CV_64F, ksize=3)
 
 
-median_blur = cv2.medianBlur(I, ksize=11)  # Kernel size 5
+median_blur = cv2.medianBlur(I, ksize=11)
 
 
 cv2.imshow("Original", I)
