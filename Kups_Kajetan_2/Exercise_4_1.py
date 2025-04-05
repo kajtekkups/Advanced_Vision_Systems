@@ -14,7 +14,6 @@ def read_frame(i):
     image_path = images_dir / f'in{i:06d}.jpg'
     I = cv2.imread(image_path)
     I = cv2.cvtColor(I, cv2.COLOR_BGR2GRAY)
-    I = cv2.medianBlur(I, ksize=5) 
     I = I.astype('int')
     
     return I
@@ -29,13 +28,14 @@ def read_groundtruth(i):
 
 def detect_object(current_frame, previous_frame):
 
-    subtraction = current_frame - previous_frame
-    subtraction = abs(subtraction)
-    binary_image = np.where(subtraction > 45, 255, 0).astype(np.uint8)
+    subtraction = ((np.int32(current_frame) - np.int32(previous_frame)) + 255)/2
+    subtraction = np.uint8(subtraction)
+    binary_image = np.where(subtraction > 135, 255, 0).astype(np.uint8)
 
-    kernel = np.ones((7,7), np.uint8)
-    dilated = cv2.dilate(binary_image, kernel, iterations=5)
-    eroded = cv2.erode(dilated, kernel, iterations=2)
+    binary_image = cv2.medianBlur(binary_image, ksize=5) 
+    kernel = np.ones((2,2), np.uint8)
+    dilated = cv2.dilate(binary_image, kernel, iterations=15)
+    eroded = cv2.erode(dilated, kernel, iterations=1)
     
     return eroded
 
@@ -60,6 +60,7 @@ def calculate_indicators(groundtruth_img, detected_img, TP, TN, FP, FN):
     return TP, TN, FP, FN
 
 
+    
 TP =0
 TN = 0
 FP = 0

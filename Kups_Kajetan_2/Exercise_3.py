@@ -11,20 +11,20 @@ def read_frame(i):
     image_path = images_dir / f'in{i:06d}.jpg'
     I = cv2.imread(image_path)
     I = cv2.cvtColor(I, cv2.COLOR_BGR2GRAY)
-    I = cv2.medianBlur(I, ksize=5) 
     I = I.astype('int')
     
     return I
 
 def detect_object(current_frame, previous_frame):
 
-    subtraction = current_frame - previous_frame
-    subtraction = abs(subtraction)
-    binary_image = np.where(subtraction > 45, 255, 0).astype(np.uint8)
+    subtraction = ((np.int32(current_frame) - np.int32(previous_frame)) + 255)/2
+    subtraction = np.uintc(subtraction)
+    binary_image = np.where(subtraction > 135, 255, 0).astype(np.uint8)
 
-    kernel = np.ones((7,7), np.uint8)
-    dilated = cv2.dilate(binary_image, kernel, iterations=5)
-    eroded = cv2.erode(dilated, kernel, iterations=2)
+    binary_image = cv2.medianBlur(binary_image, ksize=5) 
+    kernel = np.ones((2,2), np.uint8)
+    dilated = cv2.dilate(binary_image, kernel, iterations=10)
+    eroded = cv2.erode(dilated, kernel, iterations=1)
     
     return eroded
 
@@ -49,7 +49,8 @@ def display_surrounding_rectangle(binary_img, original_img):
 
     # cv2.imshow("subtraction", np.uint8( labels / retval * 255))
     cv2.imshow("2", baw_original_img)
-    cv2.waitKey()
+    cv2.imshow("binary_img", binary_img)
+    cv2.waitKey(10)
 
 previous_frame = read_frame(339)
 for i in range(340, 1100, 1) :

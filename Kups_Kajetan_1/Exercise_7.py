@@ -11,7 +11,7 @@ gaussian = cv2.GaussianBlur(I, ksize=(7,7), sigmaX=0)
 
 
 # ddepth defines the data type of the output image.
-sobel = cv2.Sobel(I, ddepth=cv2.CV_8U, dx=1, dy=1, ksize=3) #Calculates the first, second, third, or mixed image derivatives using an extended Sobel operator.
+sobel = cv2.Sobel(I, ddepth=cv2.CV_8U, dx=1, dy=1, ksize=5) #Calculates the first, second, third, or mixed image derivatives using an extended Sobel operator
 
 laplacian = cv2.Laplacian(I, cv2.CV_64F, ksize=3)
 

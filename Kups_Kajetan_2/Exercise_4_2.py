@@ -29,13 +29,14 @@ def read_groundtruth(i):
 
 def detect_object(current_frame, previous_frame):
 
-    subtraction = current_frame - previous_frame
-    subtraction = abs(subtraction)
-    binary_image = np.where(subtraction > 45, 255, 0).astype(np.uint8)
+    subtraction = ((np.int32(current_frame) - np.int32(previous_frame)) + 255)/2
+    subtraction = np.uintc(subtraction)
+    binary_image = np.where(subtraction > 135, 255, 0).astype(np.uint8)
 
-    kernel = np.ones((7,7), np.uint8)
-    dilated = cv2.dilate(binary_image, kernel, iterations=5)
-    eroded = cv2.erode(dilated, kernel, iterations=2)
+    binary_image = cv2.medianBlur(binary_image, ksize=5) 
+    kernel = np.ones((2,2), np.uint8)
+    dilated = cv2.dilate(binary_image, kernel, iterations=10)
+    eroded = cv2.erode(dilated, kernel, iterations=1)
     
     return eroded
 
