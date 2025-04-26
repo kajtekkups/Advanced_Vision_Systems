@@ -20,7 +20,7 @@ with open(events, "r") as file:
     for line in file:
         i += 1
         words = line.strip().split(" ")  # Strip removes trailing newlines
-        if i > 15000:
+        if i > 8000:
             break
         lines.append(words)
 

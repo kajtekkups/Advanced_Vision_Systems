@@ -90,9 +90,9 @@ if __name__ == "__main__":
             img_number += 1
         i += 1
 
-for num in range(img_number):
-    cv2.imshow("all_frames", all_frames[num])
-    cv2. waitKey(10)
+    for num in range(img_number):
+        cv2.imshow("all_frames", all_frames[num])
+        cv2. waitKey(10)
 
 
 
